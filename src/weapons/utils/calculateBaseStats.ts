@@ -1,0 +1,47 @@
+import { AssaultRifleStats } from "../parents";
+
+export type UpgradeStatsType = {
+  cost: number;
+  damageMultiplier: number;
+  weight: number;
+};
+
+const calcDamage = (
+  base: AssaultRifleStats["primaryDamage"][number],
+  upgrade: UpgradeStatsType
+) => {
+  return {
+    ...base,
+    upgradedDamage:
+      base.baseDamage + base.baseDamage * upgrade.damageMultiplier,
+  };
+};
+
+export const calculateBaseStats = (
+  baseStats: AssaultRifleStats,
+  upgradeStats: UpgradeStatsType
+) => {
+  // if no upgrade, return
+  if (upgradeStats.damageMultiplier === 0) return baseStats;
+
+  const output = { ...baseStats };
+  output.upgradedWeight = baseStats.baseWeight + upgradeStats.weight;
+  output.upgradedCost = baseStats.baseCost + upgradeStats.cost;
+
+  // apply upgrade to primary damage values
+  const upgradedPrimaryDamageValues = baseStats.primaryDamage.map((el) => {
+    return calcDamage(el, upgradeStats);
+  });
+  output.primaryDamage = upgradedPrimaryDamageValues;
+
+  // if no secondary damage, return
+  if (!baseStats.secondaryDamage) return output;
+
+  // apply upgrade to secondary demage values
+  const upgradedSecondaryDamageValues = baseStats.secondaryDamage.map((el) => {
+    return calcDamage(el, upgradeStats);
+  });
+  output.secondaryDamage = upgradedSecondaryDamageValues;
+
+  return output;
+};

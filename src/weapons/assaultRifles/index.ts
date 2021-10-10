@@ -12,8 +12,8 @@ import { Stoner } from "./stoner";
 
 export const assaultRifles = {
   ak12: AK12,
-  ar15: AR15,
-  bullpup: Bullpup,
+  // ar15: AR15,
+  // bullpup: Bullpup,
   // famas: FAMAS,
   // hmtech401: HMTech401,
   // hmtech501: HMTech501,
@@ -26,8 +26,8 @@ export const assaultRifles = {
 
 export interface AssaultRifleUpgradeOptions {
   ak12: AK12UpgradeOptions;
-  ar15: AR15UpgradeOptions;
-  bullpup: BullpupUpgradeOptions;
+  // ar15: AR15UpgradeOptions;
+  // bullpup: BullpupUpgradeOptions;
   // famas: FAMAS,
   // hmtech401: HMTech401,
   // hmtech501: HMTech501,

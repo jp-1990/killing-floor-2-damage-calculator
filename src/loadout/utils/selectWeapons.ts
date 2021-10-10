@@ -1,13 +1,21 @@
-import {
-  buildWeapon,
-  WeaponType,
-  WeaponName,
-} from "../../weapons/utils/buildWeapon";
+import { assaultRifles, AssaultRifleUpgradeOptions } from "../../weapons";
+
+const weapons = {
+  ...assaultRifles,
+};
+
+export type WeaponName = keyof typeof weapons;
+type UpgradeOptions = AssaultRifleUpgradeOptions;
+
+export interface WeaponType<Weapon extends WeaponName> {
+  name: Weapon;
+  upgrade: UpgradeOptions[Weapon];
+}
 
 export const selectWeapons = <Weapon extends WeaponName>(
-  weapons: WeaponType<Weapon>[]
+  weaponsInput: WeaponType<Weapon>[]
 ) => {
-  return weapons.map((el) => {
-    return buildWeapon<typeof el.name>(el.name, el.upgrade);
+  return weaponsInput.map((el) => {
+    return new weapons[el.name](el.upgrade || 0);
   });
 };

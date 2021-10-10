@@ -1,5 +1,5 @@
 import { AssaultRifle } from "../parents";
-import { DamageGroups, DamageTypes, FireMode, FireType } from "../types";
+import { FireMode, FireType, DamageGroups, DamageTypes } from "../types";
 
 export type AK12UpgradeOptions = 0 | 1 | 2;
 

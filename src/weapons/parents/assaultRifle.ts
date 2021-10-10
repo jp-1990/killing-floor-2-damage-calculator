@@ -4,7 +4,7 @@ import {
   HandlingModel,
   FireRateModel,
   AmmoModel,
-} from "../types";
+} from "../types/";
 import { PerkName } from "../../perks";
 import { calculateBaseStats, UpgradeStatsType } from "../utils";
 

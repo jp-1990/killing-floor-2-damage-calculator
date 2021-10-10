@@ -33,6 +33,12 @@ const health = {
     suicidal: [100, 20],
     hoe: [100, 20],
   }),
+  edar: fixedHealth({
+    normal: [581, 262, { core: 150 }],
+    hard: [775, 350, { core: 150 }],
+    suicidal: [775, 350, { core: 150 }],
+    hoe: [1007, 385, { core: 150 }],
+  }),
   fleshpound: scalingHealth({
     values: {
       normal: [1125, 487],
@@ -98,6 +104,12 @@ const health = {
       body: 0.2,
       head: 0.15,
     },
+  }),
+  rioter: fixedHealth({
+    normal: [225, 93],
+    hard: [300, 125],
+    suicidal: [300, 125],
+    hoe: [300, 125],
   }),
   scrake: scalingHealth({
     values: {

@@ -1,5 +1,5 @@
 import { Commando } from "../commando";
-import { PlayerPerk, PerkName } from "..";
+import { PlayerPerk, PerkName } from "../types";
 
 const perks = {
   commando: Commando,

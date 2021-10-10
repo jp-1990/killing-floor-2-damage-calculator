@@ -1,9 +1,9 @@
 import { GameType } from "../types";
 import { buildPerk, Commando, PlayerPerk, PerkName } from "../perks";
-import { buildWeapon, WeaponType } from "../weapons";
+
 import { buildZeds } from "../zeds";
 
-import { selectWeapons } from "./utils";
+import { selectWeapons, WeaponType, WeaponName } from "./utils";
 
 // input ----
 // perk
@@ -40,7 +40,7 @@ export class Loadout {
   shotsToKill;
   constructor(
     perk: PlayerPerk<PerkName>,
-    weapons: WeaponType[],
+    weapons: WeaponType<WeaponName>[],
     game: GameType
   ) {
     this.game = game;

@@ -1,10 +1,15 @@
 import { DamageGroups } from "./damage-groups";
 import { DamageTypes } from "./damage-types";
-import { FireMode } from "./fire-mode";
 
 export enum FireType {
   primary = "primary",
   secondary = "secondary",
+}
+
+export enum FireMode {
+  semi = "semi",
+  burst = "burst",
+  auto = "auto",
 }
 
 export interface DamageModel {

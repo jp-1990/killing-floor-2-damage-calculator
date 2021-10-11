@@ -2,6 +2,7 @@ import { DamageGroups, DamageTypes } from "../../weapons/types";
 
 type PerkNames = "commando";
 type PerkLevel =
+  | 0
   | 1
   | 2
   | 3
@@ -28,7 +29,7 @@ type PerkLevel =
   | 24
   | 25;
 
-type InputValuesType<S> = {
+export type PerkInputValues<S> = {
   name: PerkNames;
   level: PerkLevel;
   skills: S;
@@ -42,7 +43,11 @@ export class Perk<Skills> {
   skills;
   damageGroups;
   damageTypes;
-  constructor(values: InputValuesType<Skills>) {
+  /**
+   * @param {object} values - name, level, skills, damageGroups, damageTypes
+   * @see {@link InputValuesType}
+   */
+  constructor(values: PerkInputValues<Skills>) {
     this.name = values.name;
     this.level = values.level;
     this.skills = values.skills;

@@ -1,1 +1,1 @@
-export { Perk } from "./perk";
+export { Perk, PerkInputValues } from "./perk";

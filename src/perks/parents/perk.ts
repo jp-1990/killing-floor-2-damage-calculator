@@ -29,29 +29,32 @@ type PerkLevel =
   | 24
   | 25;
 
-export type PerkInputValues<S> = {
+export type PerkInputValues<S, W> = {
   name: PerkNames;
   level: PerkLevel;
   skills: S;
   damageGroups: DamageGroups[];
   damageTypes: DamageTypes[];
+  perkWeapons: W;
 };
 
-export class Perk<Skills> {
+export class Perk<Skills, Weapons> {
   name;
   level;
   skills;
   damageGroups;
   damageTypes;
+  perkWeapons;
   /**
-   * @param {object} values - name, level, skills, damageGroups, damageTypes
-   * @see {@link InputValuesType}
+   * @param {object} values - name, level, skills, damageGroups, damageTypes, perkWeapons
+   * @see {@link PerkInputValues}
    */
-  constructor(values: PerkInputValues<Skills>) {
+  constructor(values: PerkInputValues<Skills, Weapons>) {
     this.name = values.name;
     this.level = values.level;
     this.skills = values.skills;
     this.damageGroups = values.damageGroups;
     this.damageTypes = values.damageTypes;
+    this.perkWeapons = values.perkWeapons;
   }
 }

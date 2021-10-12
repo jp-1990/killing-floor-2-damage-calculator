@@ -1,5 +1,5 @@
 import { DamageGroups } from "../types";
-import { PerkName } from "../../perks";
+import { PerkNames } from "../../perks";
 
 export interface RifleStats {
   baseDamage: number;
@@ -29,9 +29,9 @@ export interface RifleStats {
 export class Rifle {
   damageType: "ballistic";
   damageGroup: DamageGroups.rifle;
-  perks: PerkName[];
+  perks: PerkNames[];
 
-  constructor(perks: PerkName[]) {
+  constructor(perks: PerkNames[]) {
     this.damageType = "ballistic";
     this.damageGroup = DamageGroups.rifle;
     this.perks = perks;

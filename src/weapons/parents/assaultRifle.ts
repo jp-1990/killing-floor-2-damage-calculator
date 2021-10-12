@@ -5,7 +5,7 @@ import {
   FireRateModel,
   AmmoModel,
 } from "../types/";
-import { PerkName } from "../../perks";
+import { PerkNames } from "../../perks";
 import { calculateBaseStats, UpgradeStatsType } from "../utils";
 
 export interface AssaultRifleStats {
@@ -26,10 +26,10 @@ export interface AssaultRifleStats {
 }
 
 export class AssaultRifle {
-  perks: PerkName[];
+  perks: PerkNames[];
   stats: AssaultRifleStats;
   constructor(
-    perks: PerkName[],
+    perks: PerkNames[],
     stats: AssaultRifleStats,
     upgradeStats: UpgradeStatsType
   ) {

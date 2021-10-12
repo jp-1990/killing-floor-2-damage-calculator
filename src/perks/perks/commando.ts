@@ -22,7 +22,7 @@ type L5 = keyof typeof level5;
 type L10 = keyof typeof level10;
 type L15 = keyof typeof level15;
 type L20 = keyof typeof level20;
-type PerkSkillOptions = [L5?, L10?, L15?, L20?];
+export type CommandoSkillOptions = [L5?, L10?, L15?, L20?];
 
 const commandoSkills = {
   ...level5,
@@ -51,18 +51,26 @@ const commandoWeapons = [
 ];
 type CommandoPerkWeapons = typeof commandoWeapons;
 
-export class Commando extends Perk<PerkSkillOptions, CommandoPerkWeapons> {
+/**
+ * @param {object} values - object containing level and skills array
+ * @param {number} values.level - number (0 - 25)
+ * @param {CommandoSkillOptions} values.skills - array containing string values of skill names
+ *
+ * @returns {object} Commando object - name, level, skills, damageGroups, damageTypes, perkWeapons, passiveModifiers, perkModifiers
+ */
+export class Commando extends Perk<CommandoSkillOptions, CommandoPerkWeapons> {
   passiveModifiers;
   skillModifiers;
   /**
-   * @param {number} level - number (0 - 25)
-   * @param {PerkSkillOptions} skills - array containing string values of skill names
+   * @param {object} values - object containing level and skills array
+   * @param {number} values.level - number (0 - 25)
+   * @param {CommandoSkillOptions} values.skills - array containing string values of skill names
    *
    * @returns {object} Commando object - name, level, skills, damageGroups, damageTypes, perkWeapons, passiveModifiers, perkModifiers
    */
   constructor(
     values: Omit<
-      PerkInputValues<PerkSkillOptions, []>,
+      PerkInputValues<CommandoSkillOptions, []>,
       "name" | "damageGroups" | "damageTypes" | "perkWeapons"
     >
   ) {

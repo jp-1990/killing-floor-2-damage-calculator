@@ -1,7 +1,7 @@
 import { DamageGroups, DamageTypes } from "../../weapons/types";
 
-type PerkNames = "commando";
-type PerkLevel =
+export type PerkNames = "commando";
+export type PerkLevel =
   | 0
   | 1
   | 2

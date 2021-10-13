@@ -15,6 +15,7 @@ interface BuildPerkArgs<PerkName extends keyof SkillsType> {
   level: PerkLevel;
   skills: SkillsType[PerkName];
 }
+export type BuildPerkType = BuildPerkArgs<keyof SkillsType>;
 
 export const buildPerk = <PerkName extends keyof SkillsType>(
   options: BuildPerkArgs<PerkName>

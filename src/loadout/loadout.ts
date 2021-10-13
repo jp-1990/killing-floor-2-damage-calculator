@@ -1,9 +1,7 @@
 import { GameType } from "../types";
-import { buildPerk, Commando, PlayerPerk, PerkName } from "../perks";
-
+import { buildPerk, BuildPerkType } from "../perks";
+import { selectWeapons, SelectWeaponsType } from "../weapons";
 import { buildZeds } from "../zeds";
-
-import { selectWeapons, WeaponType, WeaponName } from "./utils";
 
 // input ----
 // perk
@@ -21,69 +19,73 @@ import { selectWeapons, WeaponType, WeaponName } from "./utils";
 // }
 // weapons:{
 //   name,
-//
 // }[]
-// zeds
+// zeds[]
 
 // methods ----
-// applyPerkModifiers()
-// calculateKillTime()
+// applyPerkModifiers() // apply perk modifiers to weapons stats
+// calcDamagePerSecond() // calculate damage per second for weapons
+// calcDamagePerMag() // calculate damage per mag
+// calcTotalDamage() // calculate damage for expending all ammo
 
-const selectPerk = (perk: PlayerPerk<PerkName>) => {
-  return buildPerk(perk);
-};
+// calcKillTime() // time to kill each zed (head/body) for each weapon **account for reloads
+// calcShotsToKill() // shots to kill each zed (head/body) for each weapon
+
+interface LoadoutInputType {
+  game: GameType;
+  perk: BuildPerkType;
+  weapons: SelectWeaponsType[];
+}
 
 export class Loadout {
-  game: GameType;
-  playerStats: Commando;
+  game;
+  perk;
   weapons;
-  shotsToKill;
-  constructor(
-    perk: PlayerPerk<PerkName>,
-    weapons: WeaponType<WeaponName>[],
-    game: GameType
-  ) {
+  zeds;
+  // shotsToKill;
+  constructor({ game, perk, weapons }: LoadoutInputType) {
     this.game = game;
-    this.playerStats = selectPerk(perk);
+    this.perk = buildPerk(perk);
     this.weapons = selectWeapons(weapons);
-    this.applyPerkBonuses();
-    this.shotsToKill = this.calcShotsToKill();
+    this.zeds = buildZeds(game);
+    // this.applyPerkBonuses();
+    // this.shotsToKill = this.calcShotsToKill();
   }
 
-  applyPerkBonuses() {
-    this.weapons.forEach((weapon) => {
-      weapon.stats.damage +=
-        weapon.stats.baseDamage * this.playerStats.stats.damageMultiplier;
-    });
-  }
+  // applyPerkBonuses() {
+  //   this.weapons.forEach((weapon) => {
+  //     weapon.stats.damage +=
+  //       weapon.stats.baseDamage * this.playerStats.stats.damageMultiplier;
+  //   });
+  // }
 
-  calcShotsToKill() {
-    const zedStats = buildZeds(this.game);
+  // calcShotsToKill() {
+  //   const zedStats = buildZeds(this.game);
 
-    let result = {};
-    this.weapons.forEach((weapon) => {
-      const output: { [key: string]: { head: number; body: number } } = {};
-      Object.keys(zedStats).forEach((el) => {
-        const zed = el as keyof typeof zedStats;
-        output[zed] = {
-          head: Math.ceil(
-            zedStats[zed].health.head /
-              Math.floor(
-                Math.floor(weapon.stats.damage * zedStats[zed].hitzones.head) *
-                  zedStats[zed].resistances[weapon.damageGroup]
-              )
-          ),
-          body: Math.ceil(
-            zedStats[zed].health.body /
-              Math.floor(
-                weapon.stats.damage *
-                  zedStats[zed].resistances[weapon.damageGroup]
-              )
-          ),
-        };
-      });
-      result = { ...result, [weapon.name]: output };
-    });
-    return result;
-  }
+  //   let result = {};
+  //   this.weapons.forEach((weapon) => {
+  //     const output: { [key: string]: { head: number; body: number } } = {};
+  //     Object.keys(zedStats).forEach((el) => {
+  //       const zed = el as keyof typeof zedStats;
+  //       output[zed] = {
+  //         head: Math.ceil(
+  //           zedStats[zed].health.head /
+  //             Math.floor(
+  //               Math.floor(weapon.stats.damage * zedStats[zed].hitzones.head) *
+  //                 zedStats[zed].resistances[weapon.damageGroup]
+  //             )
+  //         ),
+  //         body: Math.ceil(
+  //           zedStats[zed].health.body /
+  //             Math.floor(
+  //               weapon.stats.damage *
+  //                 zedStats[zed].resistances[weapon.damageGroup]
+  //             )
+  //         ),
+  //       };
+  //     });
+  //     result = { ...result, [weapon.name]: output };
+  //   });
+  //   return result;
+  // }
 }

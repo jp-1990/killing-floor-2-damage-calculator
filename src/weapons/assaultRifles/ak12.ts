@@ -10,13 +10,13 @@ const ak12UpgradeStats = [
 ];
 
 const ak12BaseStats = {
-  baseCost: 1100,
-  baseWeight: 6,
+  cost: 1100,
+  weight: 6,
   primaryDamage: [
     {
       type: DamageTypes.ballistic,
       group: DamageGroups.assault_rifle,
-      baseDamage: 40,
+      damage: 40,
       penetration: 0,
     },
   ],
@@ -58,7 +58,7 @@ export class AK12 extends AssaultRifle {
   name;
   upgrade;
   constructor(upgrade: AK12UpgradeOptions) {
-    super(["commando"], ak12BaseStats, ak12UpgradeStats[upgrade]);
+    super(ak12BaseStats, ak12UpgradeStats[upgrade]);
     this.name = "ak12";
     this.upgrade = upgrade || 0;
   }

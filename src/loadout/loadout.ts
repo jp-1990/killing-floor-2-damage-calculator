@@ -48,44 +48,44 @@ export class Loadout {
     this.perk = buildPerk(perk);
     this.weapons = selectWeapons(weapons);
     this.zeds = buildZeds(game);
-    // this.applyPerkBonuses();
+    this.#applyPerkModifiers();
     // this.shotsToKill = this.calcShotsToKill();
   }
 
-  // applyPerkBonuses() {
-  //   this.weapons.forEach((weapon) => {
-  //     weapon.stats.damage +=
-  //       weapon.stats.baseDamage * this.playerStats.stats.damageMultiplier;
-  //   });
-  // }
+  // apply perk modifiers
+  #applyPerkModifiers() {
+    // for each weapon
+    this.weapons.forEach((weapon, index) => {
+      // if weapon not in perk weapons, return
+      if (!this.perk.perkWeapons.includes(weapon.name)) return;
+      // apply perk modifiers to weapon stats
 
-  // calcShotsToKill() {
-  //   const zedStats = buildZeds(this.game);
-
-  //   let result = {};
-  //   this.weapons.forEach((weapon) => {
-  //     const output: { [key: string]: { head: number; body: number } } = {};
-  //     Object.keys(zedStats).forEach((el) => {
-  //       const zed = el as keyof typeof zedStats;
-  //       output[zed] = {
-  //         head: Math.ceil(
-  //           zedStats[zed].health.head /
-  //             Math.floor(
-  //               Math.floor(weapon.stats.damage * zedStats[zed].hitzones.head) *
-  //                 zedStats[zed].resistances[weapon.damageGroup]
-  //             )
-  //         ),
-  //         body: Math.ceil(
-  //           zedStats[zed].health.body /
-  //             Math.floor(
-  //               weapon.stats.damage *
-  //                 zedStats[zed].resistances[weapon.damageGroup]
-  //             )
-  //         ),
-  //       };
-  //     });
-  //     result = { ...result, [weapon.name]: output };
-  //   });
-  //   return result;
-  // }
+      // commando specific
+      weapon.stats.primaryDamage.forEach((damageType) => {
+        if (this.perk.damageTypes.includes(damageType.type)) {
+          damageType.damage += Math.ceil(
+            damageType.damage * this.perk.passiveModifiers.damage
+          );
+        }
+      });
+      weapon.stats.secondaryDamage?.forEach((damageType) => {
+        if (this.perk.damageTypes.includes(damageType.type)) {
+          damageType.damage += Math.ceil(
+            damageType.damage * this.perk.passiveModifiers.damage
+          );
+        }
+      });
+      weapon.stats.reload.forEach((damageType) => {
+        const normal = damageType.normal;
+        normal.dry -= normal.dry * this.perk.passiveModifiers.reload;
+        normal.half -= normal.half * this.perk.passiveModifiers.reload;
+        if (damageType.elite) {
+          const elite = damageType.elite;
+          elite.dry -= elite.dry * this.perk.passiveModifiers.reload;
+          elite.half -= elite.half * this.perk.passiveModifiers.reload;
+        }
+      });
+    });
+    console.log("from function");
+  }
 }

@@ -3,19 +3,19 @@ import { DamageGroups, DamageTypes } from "../../weapons/types";
 
 const level5 = {
   "tactical reload": [{ eliteReload: 1 }],
-  "high capacity mags": [{ magSizeIncrease: 0.5 }],
+  "high capacity mags": [{ magSize: 0.5 }],
 };
 const level10 = {
-  fallback: [{ "9mm": 0.85 }, { knife: 0.85 }, { weaponSwitchIncrease: 0.5 }],
-  "impact rounds": [{ stumblePowerIncrease: 1.5 }],
+  fallback: [{ "9mm": 0.85 }, { knife: 0.85 }, { weaponSwitch: 0.5 }],
+  "impact rounds": [{ stumblePower: 1.5 }],
 };
 const level15 = {
-  tenacious: [{ healthIncrease: 0.25 }, { armourIncrease: 0.25 }],
-  prepared: [{ maxAmmoIncrease: 0.2 }],
+  tenacious: [{ health: 0.25 }, { armour: 0.25 }],
+  prepared: [{ spareAmmo: 0.2 }],
 };
 const level20 = {
-  "hollow point rounds": [{ damageMultiplier: 0.3 }],
-  "eat lead": [{ magSizeIncrease: 1 }],
+  "hollow point rounds": [{ damage: 0.3 }],
+  "eat lead": [{ magSize: 1 }],
 };
 
 type L5 = keyof typeof level5;
@@ -87,10 +87,10 @@ export class Commando extends Perk<CommandoSkillOptions, CommandoPerkWeapons> {
   }
   #calcPassiveModifiers() {
     return {
-      damageMultiplier: this.level / 100,
+      damage: this.level / 100,
       resets: 1 + Math.floor(this.level / 5),
-      reloadSpeedIncrease: (Math.floor(this.level / 5) * 2) / 100,
-      recoilReduction: (this.level * 2) / 100,
+      reload: (Math.floor(this.level / 5) * 2) / 100,
+      recoil: (this.level * 2) / 100,
       sightRange: 10 + this.level * 2,
     };
   }

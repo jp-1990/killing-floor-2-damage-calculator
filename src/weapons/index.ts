@@ -3,7 +3,7 @@ import { rifles, RifleUpgradeOptions } from "./rifles";
 
 const weapons = {
   ...assaultRifles,
-  ...rifles,
+  // ...rifles,
 };
 export type WeaponName = keyof typeof weapons;
 

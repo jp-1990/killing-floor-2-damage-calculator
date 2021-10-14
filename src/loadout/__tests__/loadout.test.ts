@@ -27,12 +27,16 @@ describe("loadout class", () => {
       },
       perk: {
         name: "commando",
-        level: 0,
+        level: 10,
         skills: [],
       },
-      weapons: [{ name: "ak12", upgrade: 0 }],
+      weapons: [
+        { name: "ak12", upgrade: 0 },
+        { name: "ak12", upgrade: 2 },
+      ],
     });
-    console.log(loadout);
+    console.log(loadout.perk);
+    loadout.weapons.forEach((el) => console.log(el.stats));
 
     expect(loadout).toHaveProperty("game", {
       players: 6,
@@ -41,7 +45,7 @@ describe("loadout class", () => {
     expect(loadout).toHaveProperty(
       "perk",
       new Commando({
-        level: 0,
+        level: 10,
         skills: [],
       })
     );

@@ -15,8 +15,7 @@ export enum FireMode {
 export interface DamageModel {
   type: DamageTypes;
   group: DamageGroups;
-  baseDamage: number;
-  upgradedDamage?: number;
+  damage: number;
   penetration?: number;
   DoT?: {
     interval: number;

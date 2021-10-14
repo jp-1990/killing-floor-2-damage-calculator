@@ -5,14 +5,11 @@ import {
   FireRateModel,
   AmmoModel,
 } from "../types/";
-import { PerkNames } from "../../perks";
 import { calculateBaseStats, UpgradeStatsType } from "../utils";
 
 export interface AssaultRifleStats {
-  baseCost: number;
-  upgradedCost?: number;
-  baseWeight: number;
-  upgradedWeight?: number;
+  cost: number;
+  weight: number;
 
   primaryDamage: DamageModel[];
   primaryFireRate: FireRateModel[];
@@ -26,14 +23,8 @@ export interface AssaultRifleStats {
 }
 
 export class AssaultRifle {
-  perks: PerkNames[];
   stats: AssaultRifleStats;
-  constructor(
-    perks: PerkNames[],
-    stats: AssaultRifleStats,
-    upgradeStats: UpgradeStatsType
-  ) {
-    this.perks = perks;
+  constructor(stats: AssaultRifleStats, upgradeStats: UpgradeStatsType) {
     this.stats = calculateBaseStats(stats, upgradeStats);
   }
 }

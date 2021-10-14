@@ -12,8 +12,7 @@ const calcDamage = (
 ) => {
   return {
     ...base,
-    upgradedDamage:
-      base.baseDamage + base.baseDamage * upgrade.damageMultiplier,
+    damage: base.damage + base.damage * upgrade.damageMultiplier,
   };
 };
 
@@ -25,8 +24,8 @@ export const calculateBaseStats = (
   if (upgradeStats.damageMultiplier === 0) return baseStats;
 
   const output = { ...baseStats };
-  output.upgradedWeight = baseStats.baseWeight + upgradeStats.weight;
-  output.upgradedCost = baseStats.baseCost + upgradeStats.cost;
+  output.weight = baseStats.weight + upgradeStats.weight;
+  output.cost = baseStats.cost + upgradeStats.cost;
 
   // apply upgrade to primary damage values
   const upgradedPrimaryDamageValues = baseStats.primaryDamage.map((el: any) => {

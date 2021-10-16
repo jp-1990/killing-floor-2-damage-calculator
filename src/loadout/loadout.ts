@@ -1,5 +1,5 @@
 import { GameType } from "../types";
-import { buildPerk, BuildPerkType } from "../perks";
+import { buildPerk, BuildPerkType, applyModifiers } from "../perks";
 import { selectWeapons, SelectWeaponsType } from "../weapons";
 import { buildZeds } from "../zeds";
 
@@ -54,38 +54,21 @@ export class Loadout {
 
   // apply perk modifiers
   #applyPerkModifiers() {
-    // for each weapon
+    const skills = this.perk.skills;
+    const passiveModifiers = this.perk.passiveModifiers;
+    const skillModifiers = this.perk.skillModifiers;
+
     this.weapons.forEach((weapon, index) => {
       // if weapon not in perk weapons, return
       if (!this.perk.perkWeapons.includes(weapon.name)) return;
-      // apply perk modifiers to weapon stats
 
-      // commando specific
-      weapon.stats.primaryDamage.forEach((damageType) => {
-        if (this.perk.damageTypes.includes(damageType.type)) {
-          damageType.damage += Math.ceil(
-            damageType.damage * this.perk.passiveModifiers.damage
-          );
-        }
-      });
-      weapon.stats.secondaryDamage?.forEach((damageType) => {
-        if (this.perk.damageTypes.includes(damageType.type)) {
-          damageType.damage += Math.ceil(
-            damageType.damage * this.perk.passiveModifiers.damage
-          );
-        }
-      });
-      weapon.stats.reload.forEach((damageType) => {
-        const normal = damageType.normal;
-        normal.dry -= normal.dry * this.perk.passiveModifiers.reload;
-        normal.half -= normal.half * this.perk.passiveModifiers.reload;
-        if (damageType.elite) {
-          const elite = damageType.elite;
-          elite.dry -= elite.dry * this.perk.passiveModifiers.reload;
-          elite.half -= elite.half * this.perk.passiveModifiers.reload;
-        }
+      applyModifiers({
+        skills,
+        skillModifiers,
+        passiveModifiers,
+        name: this.perk.name,
+        weaponInput: weapon,
       });
     });
-    console.log("from function");
   }
 }

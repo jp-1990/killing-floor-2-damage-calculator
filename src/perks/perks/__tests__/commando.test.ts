@@ -47,19 +47,19 @@ describe("commando class", () => {
 
   test("returns perk object with expected calculated values", () => {
     expect(commando).toHaveProperty("passiveModifiers", {
-      damageMultiplier: 0.2,
+      damage: 0.2,
       resets: 5,
-      reloadSpeedIncrease: 0.08,
-      recoilReduction: 0.4,
+      reload: 0.08,
+      recoil: 0.4,
       sightRange: 50,
     });
     expect(commando).toHaveProperty("skillModifiers", {
-      magSizeIncrease: 0.5,
+      magSize: 0.5,
       "9mm": 0.85,
       knife: 0.85,
-      weaponSwitchIncrease: 0.5,
-      maxAmmoIncrease: 0.2,
-      damageMultiplier: 0.3,
+      weaponSwitch: 0.5,
+      spareAmmo: 0.2,
+      damage: 0.3,
     });
   });
 });

@@ -16,6 +16,7 @@ export interface DamageModel {
   type: DamageTypes;
   group: DamageGroups;
   damage: number;
+  base: number;
   penetration?: number;
   DoT?: {
     interval: number;
@@ -51,4 +52,19 @@ export interface FireRateModel {
 export interface AmmoModel {
   magSize: number;
   spareAmmo: number;
+}
+
+export interface WeaponStatsType {
+  cost: number;
+  weight: number;
+
+  primaryDamage: DamageModel[];
+  primaryFireRate: FireRateModel[];
+
+  secondaryDamage?: DamageModel[];
+  secondaryFireRate?: FireRateModel[];
+
+  reload: ReloadModel[];
+  handling: HandlingModel;
+  ammo: AmmoModel;
 }

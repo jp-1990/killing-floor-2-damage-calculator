@@ -4,13 +4,14 @@ import { DamageGroups, DamageTypes, FireMode, FireType } from "../../types";
 it("returns expected object based on input stats and upgrade options", () => {
   const calculatedStats = calculateBaseStats(
     {
-      baseCost: 1100,
-      baseWeight: 6,
+      cost: 1100,
+      weight: 6,
       primaryDamage: [
         {
           type: DamageTypes.ballistic,
           group: DamageGroups.assault_rifle,
-          baseDamage: 40,
+          base: 40,
+          damage: 40,
           penetration: 0,
         },
       ],
@@ -50,7 +51,7 @@ it("returns expected object based on input stats and upgrade options", () => {
     { cost: 700, damageMultiplier: 0.15, weight: 1 }
   );
 
-  expect(calculatedStats).toHaveProperty("upgradedWeight", 7);
-  expect(calculatedStats).toHaveProperty("upgradedCost", 1800);
-  expect(calculatedStats.primaryDamage[0]).toHaveProperty("upgradedDamage", 46);
+  expect(calculatedStats).toHaveProperty("weight", 7);
+  expect(calculatedStats).toHaveProperty("cost", 1800);
+  expect(calculatedStats.primaryDamage[0]).toHaveProperty("damage", 46);
 });

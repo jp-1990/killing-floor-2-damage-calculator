@@ -1,1 +1,1 @@
-export { buildPerk, BuildPerkType, PerkNames } from "./perks";
+export { buildPerk, BuildPerkType, PerkNames, applyModifiers } from "./perks";

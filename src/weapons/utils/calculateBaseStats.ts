@@ -12,7 +12,7 @@ const calcDamage = (
 ) => {
   return {
     ...base,
-    damage: base.damage + base.damage * upgrade.damageMultiplier,
+    damage: base.base + base.base * upgrade.damageMultiplier,
   };
 };
 

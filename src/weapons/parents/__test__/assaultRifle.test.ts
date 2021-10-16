@@ -3,15 +3,15 @@ import { FireMode, FireType, DamageGroups, DamageTypes } from "../../types";
 
 describe("assault rifle parent class", () => {
   const assaultRifle = new AssaultRifle(
-    ["commando"],
     {
-      baseCost: 1100,
-      baseWeight: 6,
+      cost: 1100,
+      weight: 6,
       primaryDamage: [
         {
           type: DamageTypes.ballistic,
           group: DamageGroups.assault_rifle,
-          baseDamage: 40,
+          damage: 40,
+          base: 40,
           penetration: 0,
         },
       ],
@@ -52,15 +52,11 @@ describe("assault rifle parent class", () => {
   );
 
   test("returns assault rifle object with expected values", () => {
-    expect(assaultRifle).toHaveProperty("perks");
     expect(assaultRifle).toHaveProperty("stats");
 
-    expect(assaultRifle.stats).toHaveProperty("upgradedWeight", 7);
-    expect(assaultRifle.stats).toHaveProperty("upgradedCost", 1800);
-    expect(assaultRifle.stats.primaryDamage[0]).toHaveProperty(
-      "upgradedDamage",
-      46
-    );
+    expect(assaultRifle.stats).toHaveProperty("weight", 7);
+    expect(assaultRifle.stats).toHaveProperty("cost", 1800);
+    expect(assaultRifle.stats.primaryDamage[0]).toHaveProperty("damage", 46);
   });
   test("object is instance of AssaultRifle", () => {
     expect(assaultRifle).toBeInstanceOf(AssaultRifle);

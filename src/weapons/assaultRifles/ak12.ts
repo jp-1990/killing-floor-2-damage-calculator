@@ -17,6 +17,7 @@ const ak12BaseStats = {
       type: DamageTypes.ballistic,
       group: DamageGroups.assault_rifle,
       damage: 40,
+      base: 40,
       penetration: 0,
     },
   ],

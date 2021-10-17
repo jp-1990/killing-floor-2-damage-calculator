@@ -26,6 +26,7 @@ const scrakeResistances = {
 
 const scrakeHitzones = {
   head: 1.1,
+  body: 1,
   chainsaw: 0.2,
 };
 

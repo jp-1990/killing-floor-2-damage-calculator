@@ -25,6 +25,7 @@ const fleshpoundResistances = {
 
 const fleshpoundHitzones = {
   head: 1.1,
+  body: 1,
   chestPlate: 1.1,
   armGrinders: 0.2,
 };

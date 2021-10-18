@@ -112,5 +112,11 @@ describe("loadout class", () => {
     ]);
 
     expect(loadout).toHaveProperty("zeds");
+
+    console.log(loadout.zeds[0]);
+    console.log(loadout.weapons[0].stats);
+    loadout.shotsToKill.forEach((el) => {
+      console.log(el.name, el.weapons);
+    });
   });
 });

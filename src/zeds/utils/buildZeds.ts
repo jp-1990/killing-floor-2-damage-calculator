@@ -1,13 +1,11 @@
 import { GameType } from "../../types";
-import { zeds, ZedType } from "../zeds";
+import { zeds } from "../zeds";
 
 export const buildZeds = (game: GameType) => {
   const zedKeys = (<unknown>Object.keys(zeds)) as (keyof typeof zeds)[];
-  const output: { [key: string]: ZedType } = {};
 
-  zedKeys.forEach((zed) => {
-    const key = zed as string;
-    output[key] = new zeds[zed](game);
+  const output = zedKeys.map((zed) => {
+    return new zeds[zed](game);
   });
 
   return output;

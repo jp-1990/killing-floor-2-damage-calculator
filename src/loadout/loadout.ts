@@ -42,23 +42,22 @@ export class Loadout {
   perk;
   weapons;
   zeds;
-  // shotsToKill;
+  shotsToKill;
   constructor({ game, perk, weapons }: LoadoutInputType) {
     this.game = game;
     this.perk = buildPerk(perk);
     this.weapons = selectWeapons(weapons);
     this.zeds = buildZeds(game);
     this.#applyPerkModifiers();
-    // this.shotsToKill = this.calcShotsToKill();
+    this.shotsToKill = this.#calcShotsToKill();
   }
 
-  // apply perk modifiers
   #applyPerkModifiers() {
     const skills = this.perk.skills;
     const passiveModifiers = this.perk.passiveModifiers;
     const skillModifiers = this.perk.skillModifiers;
 
-    this.weapons.forEach((weapon, index) => {
+    this.weapons.forEach((weapon) => {
       // if weapon not in perk weapons, return
       if (!this.perk.perkWeapons.includes(weapon.name)) return;
 
@@ -70,5 +69,63 @@ export class Loadout {
         weaponInput: weapon,
       });
     });
+  }
+
+  #calcShotsToKill() {
+    // loop over zeds
+    const output = this.zeds.map((zed) => {
+      const hitzones = (<unknown>(
+        Object.keys(zed.hitzones)
+      )) as (keyof typeof zed.hitzones)[];
+
+      // build weapon stats for zed
+      const weapons = this.weapons.map((weapon) => {
+        // build primary damage obj
+        const primaryDamage: { [key: string]: number } = {};
+        hitzones.forEach((zone) => {
+          primaryDamage[zone] = 0;
+
+          // merge primary damage numbers
+          let damagePerShot = 0;
+          weapon.stats.primaryDamage.forEach((el) => {
+            // apply hitzone modifier
+            damagePerShot = el.damage;
+
+            damagePerShot *= zed.hitzones[zone];
+            // apply resistances
+
+            const damageGroup = el.group as keyof typeof zed.resistances;
+            if (zed.resistances[damageGroup] !== undefined) {
+              damagePerShot *= zed.resistances[damageGroup];
+            }
+          });
+          Math.round(damagePerShot);
+
+          // if hitzone === head then head, else body
+          const health = zone === "head" ? zed.health.head : zed.health.body;
+          let damage = 0;
+          let counter = 0;
+          // loop while damage < health
+          while (damage < health) {
+            damage += Math.round(damagePerShot);
+            counter++;
+          }
+
+          primaryDamage[zone] = counter;
+        });
+        return {
+          name: weapon.name,
+          upgrade: weapon.upgrade,
+          primaryDamage,
+        };
+      });
+
+      return {
+        name: zed,
+        weapons,
+      };
+    });
+
+    return output;
   }
 }

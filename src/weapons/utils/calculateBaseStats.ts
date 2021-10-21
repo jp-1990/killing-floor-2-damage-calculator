@@ -1,4 +1,4 @@
-import { AssaultRifleStats } from "../parents/assaultRifle";
+import { WeaponStatsType, DamageModel } from "../types";
 
 export type UpgradeStatsType = {
   cost: number;
@@ -6,10 +6,7 @@ export type UpgradeStatsType = {
   weight: number;
 };
 
-const calcDamage = (
-  base: AssaultRifleStats["primaryDamage"][number],
-  upgrade: UpgradeStatsType
-) => {
+const calcDamage = (base: DamageModel, upgrade: UpgradeStatsType) => {
   return {
     ...base,
     damage: base.base + base.base * upgrade.damageMultiplier,
@@ -17,7 +14,7 @@ const calcDamage = (
 };
 
 export const calculateBaseStats = (
-  baseStats: AssaultRifleStats,
+  baseStats: WeaponStatsType,
   upgradeStats: UpgradeStatsType
 ) => {
   // if no upgrade, return

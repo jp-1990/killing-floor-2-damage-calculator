@@ -29,11 +29,11 @@ export interface DamageModel {
 export interface ReloadModel {
   type: FireType;
   normal: {
-    half: number;
+    half?: number;
     dry: number;
   };
   elite?: {
-    half: number;
+    half?: number;
     dry: number;
   };
 }

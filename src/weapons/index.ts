@@ -1,13 +1,17 @@
 import { assaultRifles, AssaultRifleUpgradeOptions } from "./assaultRifles";
+import { explosives, ExplosiveUpgradeOptions } from "./explosives";
 import { rifles, RifleUpgradeOptions } from "./rifles";
 
 const weapons = {
   ...assaultRifles,
+  ...explosives,
   // ...rifles,
 };
 export type WeaponName = keyof typeof weapons;
 
-type UpgradeOptions = AssaultRifleUpgradeOptions & RifleUpgradeOptions;
+type UpgradeOptions = AssaultRifleUpgradeOptions &
+  ExplosiveUpgradeOptions &
+  RifleUpgradeOptions;
 
 type Select<T> = { [K in keyof T]: { name: K; upgrade: T[K] } };
 type SelectWeapon = Select<UpgradeOptions>;
@@ -20,6 +24,7 @@ export const selectWeapons = <Weapon extends WeaponName>(
   weaponsInput: WeaponType<Weapon>[]
 ) => {
   return weaponsInput.map((el) => {
+    // @ts-expect-error works fine in practice
     return new weapons[el.name](el.upgrade || 0);
   });
 };

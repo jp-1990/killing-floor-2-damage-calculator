@@ -2,6 +2,7 @@ import { GameType } from "../types";
 import { buildPerk, BuildPerkType, applyModifiers } from "../perks";
 import { selectWeapons, SelectWeaponsType } from "../weapons";
 import { buildZeds } from "../zeds";
+import { DamageTypes } from "../weapons/types";
 
 // input ----
 // perk
@@ -74,54 +75,73 @@ export class Loadout {
   #calcShotsToKill() {
     // loop over zeds
     const output = this.zeds.map((zed) => {
-      const hitzones = (<unknown>(
-        Object.keys(zed.hitzones)
-      )) as (keyof typeof zed.hitzones)[];
-
       // build weapon stats for zed
       const weapons = this.weapons.map((weapon) => {
-        // build primary damage obj
-        const primaryDamage: { [key: string]: number } = {};
-        hitzones.forEach((zone) => {
-          primaryDamage[zone] = 0;
+        const weaponDamage: ["primaryDamage", "secondaryDamage"?] = [
+          "primaryDamage",
+        ];
+        if (weapon.stats.secondaryDamage) weaponDamage.push("secondaryDamage");
 
-          // merge primary damage numbers
-          let damagePerShot = 0;
-          weapon.stats.primaryDamage.forEach((el) => {
-            // apply hitzone modifier
-            damagePerShot = el.damage;
+        const damage = weaponDamage.map((el) => {
+          if (!el) return;
+          const shots = zed.hitzones.map((zone) => {
+            let bodyDamage = 0;
+            let headDamage = 0;
+            let counter = 0;
+            // loop while damage < health
+            while (
+              bodyDamage < zed.health.body &&
+              headDamage < zed.health.head
+            ) {
+              const excludeHead = (type: DamageTypes) =>
+                [DamageTypes.explosive].includes(type);
+              // target zone
+              const target = zone.name;
+              const modifier = zone.modifier;
+              const bodyModifier =
+                zed.hitzones.find((el) => el.name === "body")?.modifier || 1;
 
-            damagePerShot *= zed.hitzones[zone];
-            // apply resistances
+              weapon.stats[el]?.forEach((e) => {
+                let damage = e.damage;
+                // apply modifier
+                if (target === "head" && excludeHead(e.type)) {
+                  damage *= bodyModifier;
+                } else {
+                  damage *= modifier;
+                }
+                // apply resistance
+                const damageGroup = e.group as keyof typeof zed.resistances;
+                if (zed.resistances[damageGroup] !== undefined) {
+                  damage *= zed.resistances[damageGroup];
+                }
+                // if target = head, apply modified damage to head and body health
+                if (target === "head" && !excludeHead(e.type))
+                  headDamage += damage;
 
-            const damageGroup = el.group as keyof typeof zed.resistances;
-            if (zed.resistances[damageGroup] !== undefined) {
-              damagePerShot *= zed.resistances[damageGroup];
+                // if damage type cant hit head, apply to body
+                bodyDamage += damage;
+              });
+
+              counter++;
             }
+
+            return { [zone.name]: counter };
           });
-          Math.round(damagePerShot);
 
-          // if hitzone === head then head, else body
-          const health = zone === "head" ? zed.health.head : zed.health.body;
-          let damage = 0;
-          let counter = 0;
-          // loop while damage < health
-          while (damage < health) {
-            damage += Math.round(damagePerShot);
-            counter++;
-          }
-
-          primaryDamage[zone] = counter;
+          return {
+            [el]: shots,
+          };
         });
+
         return {
           name: weapon.name,
           upgrade: weapon.upgrade,
-          primaryDamage,
+          damage,
         };
       });
 
       return {
-        name: zed,
+        name: zed.name,
         weapons,
       };
     });

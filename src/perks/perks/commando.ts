@@ -155,11 +155,11 @@ export const applyCommandoModifiers = <
   stats.reload.forEach((damageType) => {
     const normal = damageType.normal;
     normal.dry -= normal.dry * reloadModifier;
-    normal.half -= normal.half * reloadModifier;
+    if (normal.half) normal.half -= normal.half * reloadModifier;
     if (damageType.elite) {
       const elite = damageType.elite;
       elite.dry -= elite.dry * reloadModifier;
-      elite.half -= elite.half * reloadModifier;
+      if (elite.half) elite.half -= elite.half * reloadModifier;
     }
   });
 

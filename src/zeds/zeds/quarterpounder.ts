@@ -23,12 +23,12 @@ const quarterpounderResistances = {
   rifle: 0.75,
 };
 
-const quarterpounderHitzones = {
-  head: 1.1,
-  body: 1,
-  chestPlate: 1.1,
-  armGrinders: 0.2,
-};
+const quarterpounderHitzones = [
+  { name: "head", modifier: 1.1 },
+  { name: "body", modifier: 1 },
+  { name: "chestPlate", modifier: 1.1 },
+  { name: "armGrinders", modifier: 0.2 },
+];
 
 type QuarterpounderResistances = typeof quarterpounderResistances;
 type QuarterpounderHitzones = typeof quarterpounderHitzones;

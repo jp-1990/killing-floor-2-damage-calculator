@@ -24,11 +24,11 @@ const scrakeResistances = {
   ballistic_hemogoblin: 0.75,
 };
 
-const scrakeHitzones = {
-  head: 1.1,
-  body: 1,
-  chainsaw: 0.2,
-};
+const scrakeHitzones = [
+  { name: "head", modifier: 1.1 },
+  { name: "body", modifier: 1 },
+  { name: "chainsaw", modifier: 0.2 },
+];
 
 type ScrakeResistances = typeof scrakeResistances;
 type ScrakeHitzones = typeof scrakeHitzones;

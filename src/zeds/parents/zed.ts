@@ -11,6 +11,16 @@ type ValuesType<R, H> = {
   penetrationResistance: number;
 };
 
+/**
+ * @param values - {@link ValuesType}
+ * @param values.name - a valid zed name
+ * @param values.game - object { players, difficulty } (used to calculate zed health)
+ * @param values.resistances - damage resistance values for this zed
+ * @param values.hitzones - damage hitzones and modifiers for this zed
+ * @param values.penetrationResistance - zed resistance to weapon penetration
+ *
+ * @description zed parent class. Contains method for calculating zed health values.
+ */
 export class Zed<Resistances, Hitzones> {
   name;
   game;

@@ -16,6 +16,13 @@ const armour = {
   }),
 };
 
+/**
+ *
+ * @param difficulty - a valid difficulty ("normal" | "hard" | "suicidal" | "hoe")
+ * @param players - number of players ( 1-6 )
+ * @param zed - name of zed ( must be a zed that wears armour )
+ * @returns armour values object for the players, difficulty and zed provided
+ */
 export const calculateArmour = (
   difficulty: GameType["difficulty"],
   players: GameType["players"],

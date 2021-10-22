@@ -22,6 +22,13 @@ export interface FixedHealthOutput {
   hoe: FixedHealthOutputDifficulty;
 }
 
+/**
+ *
+ * @param values - {@link FixedHealthInput}
+ * @returns calculated health values
+ *
+ * @description Function to calculate health values for zeds where health does not scale based on the number of players in a game.
+ */
 export const fixedHealth = (values: FixedHealthInput) => {
   const difficulty = (<unknown>Object.keys(values)) as (keyof typeof values)[];
 

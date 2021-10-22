@@ -143,6 +143,13 @@ const health = {
   }),
 };
 
+/**
+ *
+ * @param difficulty - a valid difficulty ("normal" | "hard" | "suicidal" | "hoe")
+ * @param players - number of players ( 1-6 )
+ * @param zed - name of zed
+ * @returns health values object for the players, difficulty and zed provided
+ */
 export const calculateHealth = (
   difficulty: GameType["difficulty"],
   players: GameType["players"],

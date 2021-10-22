@@ -29,6 +29,13 @@ export interface ScalingHealthOutput {
   hoe: ScalingHealthOutputDifficulty;
 }
 
+/**
+ *
+ * @param input - {@link ScalingHealthInput}
+ * @returns calculated health values
+ *
+ * @description Function to calculate health values for zeds where health scales based on the number of players in a game.
+ */
 export const scalingHealth = (input: ScalingHealthInput) => {
   const { values, modifiers } = input;
 

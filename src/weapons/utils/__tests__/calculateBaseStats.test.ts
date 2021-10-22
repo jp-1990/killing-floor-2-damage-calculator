@@ -13,6 +13,11 @@ it("returns expected object based on input stats and upgrade options", () => {
           base: 40,
           damage: 40,
           penetration: 0,
+          DoT: {
+            scale: 0.8,
+            duration: 1.7,
+            interval: 0.5,
+          },
         },
       ],
       primaryFireRate: [

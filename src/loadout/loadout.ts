@@ -2,7 +2,7 @@ import { GameType } from "../types";
 import { buildPerk, BuildPerkType, applyModifiers } from "../perks";
 import { selectWeapons, SelectWeaponsType } from "../weapons";
 import { buildZeds } from "../zeds";
-import { DamageTypes } from "../weapons/types";
+import { traceHead } from "../weapons/utils";
 
 // input ----
 // perk
@@ -30,7 +30,7 @@ import { DamageTypes } from "../weapons/types";
 // calcTotalDamage() // calculate damage for expending all ammo
 
 // calcKillTime() // time to kill each zed (head/body) for each weapon **account for reloads
-// calcShotsToKill() // shots to kill each zed (head/body) for each weapon
+// calcAmmoToKill() // shots to kill each zed (head/body) for each weapon
 
 interface LoadoutInputType {
   game: GameType;
@@ -50,7 +50,7 @@ export class Loadout {
     this.weapons = selectWeapons(weapons);
     this.zeds = buildZeds(game);
     this.#applyPerkModifiers();
-    this.shotsToKill = this.#calcShotsToKill();
+    this.shotsToKill = this.#calcAmmoToKill();
   }
 
   #applyPerkModifiers() {
@@ -72,7 +72,8 @@ export class Loadout {
     });
   }
 
-  #calcShotsToKill() {
+  // ** DoT only applies on first el in damagePerAmmo array **
+  #calcAmmoToKill() {
     // loop over zeds
     const output = this.zeds.map((zed) => {
       // build weapon stats for zed
@@ -84,6 +85,7 @@ export class Loadout {
 
         const damage = weaponDamage.map((el) => {
           if (!el) return;
+
           const shots = zed.hitzones.map((zone) => {
             let bodyDamage = 0;
             let headDamage = 0;
@@ -93,8 +95,6 @@ export class Loadout {
               bodyDamage < zed.health.body &&
               headDamage < zed.health.head
             ) {
-              const excludeHead = (type: DamageTypes) =>
-                [DamageTypes.explosive].includes(type);
               // target zone
               const target = zone.name;
               const modifier = zone.modifier;
@@ -103,8 +103,10 @@ export class Loadout {
 
               weapon.stats[el]?.forEach((e) => {
                 let damage = e.damage;
+                if (e.DoT && e.DoT.damagePerAmmo)
+                  damage += e.DoT.damagePerAmmo[0].damage;
                 // apply modifier
-                if (target === "head" && excludeHead(e.type)) {
+                if (target === "head" && !traceHead(e.type)) {
                   damage *= bodyModifier;
                 } else {
                   damage *= modifier;
@@ -115,7 +117,7 @@ export class Loadout {
                   damage *= zed.resistances[damageGroup];
                 }
                 // if target = head, apply modified damage to head and body health
-                if (target === "head" && !excludeHead(e.type))
+                if (target === "head" && traceHead(e.type))
                   headDamage += damage;
 
                 // if damage type cant hit head, apply to body

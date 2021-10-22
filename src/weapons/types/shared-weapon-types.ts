@@ -19,8 +19,11 @@ export interface DamageModel {
   base: number;
   penetration?: number;
   DoT?: {
+    scale: number;
     interval: number;
     duration: number;
+    damage?: number;
+    damagePerAmmo?: { type: FireMode; damage: number }[];
     stacking?: boolean;
     maxStacks?: number;
   };

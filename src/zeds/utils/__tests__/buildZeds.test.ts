@@ -6,9 +6,9 @@ import { Scrake } from "../../zeds/scrake";
 
 test("returns object containing instances of zeds (only tests fleshpound, quaterpounder and scrake)", () => {
   const game = { players: 1, difficulty: "normal" } as GameType;
-  const zedsObject = buildZeds(game);
+  const zedsArray = buildZeds(game);
 
-  expect(zedsObject).toHaveProperty("fleshpound", new Fleshpound(game));
-  expect(zedsObject).toHaveProperty("quarterpounder", new Quarterpounder(game));
-  expect(zedsObject).toHaveProperty("scrake", new Scrake(game));
+  expect(zedsArray[0]).toStrictEqual(new Fleshpound(game));
+  expect(zedsArray[1]).toStrictEqual(new Quarterpounder(game));
+  expect(zedsArray[2]).toStrictEqual(new Scrake(game));
 });

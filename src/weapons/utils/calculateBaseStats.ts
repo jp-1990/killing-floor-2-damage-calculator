@@ -58,9 +58,6 @@ export const calculateBaseStats = (
   baseStats: WeaponStatsType,
   upgradeStats: UpgradeStatsType
 ) => {
-  // if no upgrade, return
-  if (upgradeStats.damageMultiplier === 0) return baseStats;
-
   const weaponDamage: ["primaryDamage", "secondaryDamage"?] = ["primaryDamage"];
   if (baseStats.secondaryDamage) weaponDamage.push("secondaryDamage");
 

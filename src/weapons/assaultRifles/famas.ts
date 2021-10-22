@@ -1,4 +1,7 @@
-import { AssaultRifle, AssaultRifleStats } from "../parents";
+import { AssaultRifle } from "../parents";
+import { FireMode, FireType, DamageGroups, DamageTypes } from "../types";
+
+export type FAMASUpgradeOptions = 0 | 1 | 2;
 
 const famasUpgradeStats = [
   { cost: 0, damageMultiplier: 0, weight: 0 },
@@ -7,57 +10,79 @@ const famasUpgradeStats = [
 ];
 
 const famasBaseStats = {
-  baseDamage: 35,
-  fullAuto: undefined,
-  burst: 899,
-  semiAuto: undefined,
-  baseSecondaryDamage: 210,
-  secondaryDamageType: "shotgun",
-  secondaryFireRate: 50,
-  normalReload: {
-    normal: 2.81,
-    elite: 1.85,
-  },
-  dryReload: {
-    normal: 2.8,
-    elite: 1.86,
-  },
-  equipTime: 0.67,
-  putdownTime: 0.77,
-  accuracy: 67,
-  penetration: 1,
+  cost: 1100,
   weight: 6,
-  magSize: 30,
-  ammo: 240,
-  price: 1200,
+  primaryDamage: [
+    {
+      type: DamageTypes.ballistic,
+      group: DamageGroups.assault_rifle,
+      damage: 35,
+      base: 35,
+      penetration: 0,
+    },
+  ],
+  secondaryDamage: [
+    {
+      type: DamageTypes.ballistic,
+      group: DamageGroups.shotgun,
+      damage: 210,
+      base: 210,
+      penetration: 2,
+    },
+  ],
+  primaryFireRate: [
+    {
+      type: FireMode.burst,
+      rate: 899,
+    },
+  ],
+  secondaryFireRate: [
+    {
+      type: FireMode.semi,
+      rate: 50,
+    },
+  ],
+  reload: [
+    {
+      type: FireType.primary,
+      normal: {
+        half: 2.81,
+        dry: 2.8,
+      },
+      elite: {
+        half: 1.85,
+        dry: 1.86,
+      },
+    },
+    {
+      type: FireType.secondary,
+      normal: {
+        half: 2.55,
+        dry: 3.15,
+      },
+      elite: {
+        half: 1.97,
+        dry: 2.08,
+      },
+    },
+  ],
+  handling: {
+    equipTime: 0.67,
+    putdownTime: 0.77,
+    accuracy: 67,
+  },
+  ammo: {
+    magSize: 30,
+    spareAmmo: 240,
+  },
 };
 
 export class FAMAS extends AssaultRifle {
   name;
   upgrade;
-  stats: AssaultRifleStats;
-  constructor(upgrade: number) {
-    super(["commando"]);
+  constructor(upgrade: FAMASUpgradeOptions) {
+    super(famasBaseStats, famasUpgradeStats[upgrade]);
     this.name = "famas";
     this.upgrade = upgrade || 0;
-    this.stats = this.#baseStats();
-  }
-
-  #baseStats() {
-    const upgradeStats = famasUpgradeStats;
-    const baseStats = famasBaseStats;
-
-    return {
-      ...baseStats,
-      damage:
-        baseStats.baseDamage +
-        baseStats.baseDamage * upgradeStats[this.upgrade].damageMultiplier,
-      secondaryDamage:
-        baseStats.baseSecondaryDamage +
-        baseStats.baseSecondaryDamage *
-          upgradeStats[this.upgrade].damageMultiplier,
-      weight: baseStats.weight + upgradeStats[this.upgrade].weight,
-      price: baseStats.price + upgradeStats[this.upgrade].cost,
-    };
   }
 }

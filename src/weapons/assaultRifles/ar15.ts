@@ -1,5 +1,5 @@
 import { AssaultRifle } from "../parents";
-import { formatBaseStats } from "../utils/formatBaseStats";
+import { FireMode, FireType, DamageGroups, DamageTypes } from "../types";
 
 export type AR15UpgradeOptions = 0 | 1 | 2 | 3 | 4;
 
@@ -11,33 +11,57 @@ const ar15UpgradeStats = [
   { cost: 3300, damageMultiplier: 1, weight: 4 },
 ];
 
-const ar15BaseStats = formatBaseStats({
+const ar15BaseStats = {
   cost: 200,
   weight: 4,
-  baseDamage: 30,
-  penetration: 0,
-  burst: 500,
-  semiAuto: 500,
-  normalReload: {
-    normal: 3.07,
-    elite: 2.07,
+  primaryDamage: [
+    {
+      type: DamageTypes.ballistic,
+      group: DamageGroups.assault_rifle,
+      damage: 30,
+      base: 30,
+      penetration: 0,
+    },
+  ],
+  primaryFireRate: [
+    {
+      type: FireMode.semi,
+      rate: 500,
+    },
+    {
+      type: FireMode.burst,
+      rate: 500,
+    },
+  ],
+  reload: [
+    {
+      type: FireType.primary,
+      normal: {
+        half: 3.07,
+        dry: 2.67,
+      },
+      elite: {
+        half: 2.07,
+        dry: 1.75,
+      },
+    },
+  ],
+  handling: {
+    equipTime: 0.56,
+    putdownTime: 0.47,
+    accuracy: 60,
   },
-  dryReload: {
-    normal: 2.67,
-    elite: 1.75,
+  ammo: {
+    magSize: 20,
+    spareAmmo: 240,
   },
-  equipTime: 0.56,
-  putdownTime: 0.47,
-  accuracy: 60,
-  magSize: 20,
-  spareAmmo: 240,
-});
+};
 
 export class AR15 extends AssaultRifle {
   name;
-  upgrade = 0;
+  upgrade;
   constructor(upgrade: AR15UpgradeOptions) {
-    super(["commando"], ar15BaseStats, ar15UpgradeStats[upgrade]);
+    super(ar15BaseStats, ar15UpgradeStats[upgrade]);
     this.name = "ar15";
     this.upgrade = upgrade || 0;
   }

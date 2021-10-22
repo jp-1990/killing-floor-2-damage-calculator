@@ -1,5 +1,5 @@
 import { AssaultRifle } from "../parents";
-import { formatBaseStats } from "../utils/formatBaseStats";
+import { FireMode, FireType, DamageGroups, DamageTypes } from "../types";
 
 export type BullpupUpgradeOptions = 0 | 1 | 2 | 3;
 
@@ -10,34 +10,58 @@ const bullpupUpgradeStats = [
   { cost: 2800, damageMultiplier: 0.85, weight: 3 },
 ];
 
-const bullpupBaseStats = formatBaseStats({
+const bullpupBaseStats = {
   cost: 650,
   weight: 5,
-  baseDamage: 32,
-  penetration: 0,
-  fullAuto: 660,
-  semiAuto: 600,
-  normalReload: {
-    normal: 3.12,
-    elite: 1.93,
+  primaryDamage: [
+    {
+      type: DamageTypes.ballistic,
+      group: DamageGroups.assault_rifle,
+      damage: 32,
+      base: 32,
+      penetration: 0,
+    },
+  ],
+  primaryFireRate: [
+    {
+      type: FireMode.auto,
+      rate: 660,
+    },
+    {
+      type: FireMode.semi,
+      rate: 600,
+    },
+  ],
+  reload: [
+    {
+      type: FireType.primary,
+      normal: {
+        half: 3.12,
+        dry: 2.77,
+      },
+      elite: {
+        half: 1.93,
+        dry: 1.92,
+      },
+    },
+  ],
+  handling: {
+    equipTime: 0.52,
+    putdownTime: 0.48,
+    accuracy: 68,
   },
-  dryReload: {
-    normal: 2.77,
-    elite: 1.92,
+  ammo: {
+    magSize: 30,
+    spareAmmo: 270,
   },
-  equipTime: 0.52,
-  putdownTime: 0.48,
-  accuracy: 68,
-  magSize: 30,
-  spareAmmo: 270,
-});
+};
 
 export class Bullpup extends AssaultRifle {
   name;
-  upgrade = 0;
+  upgrade;
   constructor(upgrade: BullpupUpgradeOptions) {
-    super(["commando"], bullpupBaseStats, bullpupUpgradeStats[upgrade]);
-    this.name = "ar15";
+    super(bullpupBaseStats, bullpupUpgradeStats[upgrade]);
+    this.name = "bullpup";
     this.upgrade = upgrade || 0;
   }
 }

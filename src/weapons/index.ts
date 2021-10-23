@@ -1,16 +1,19 @@
 import { assaultRifles, AssaultRifleUpgradeOptions } from "./assaultRifles";
 import { explosives, ExplosiveUpgradeOptions } from "./explosives";
+import { fire, FireUpgradeOptions } from "./fire";
 import { rifles, RifleUpgradeOptions } from "./rifles";
 
 const weapons = {
   ...assaultRifles,
   ...explosives,
+  ...fire,
   // ...rifles,
 };
 export type WeaponName = keyof typeof weapons;
 
 type UpgradeOptions = AssaultRifleUpgradeOptions &
   ExplosiveUpgradeOptions &
+  FireUpgradeOptions &
   RifleUpgradeOptions;
 
 type Select<T> = { [K in keyof T]: { name: K; upgrade: T[K] } };

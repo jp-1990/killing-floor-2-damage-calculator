@@ -19,11 +19,15 @@ const flamethrowerBaseStats = {
       damage: 18,
       base: 18,
       penetration: 0,
-      DoT: {
-        scale: 0.8,
-        duration: 1.7,
-        interval: 0.5,
-      },
+      DoT: [
+        {
+          type: DamageTypes.fire,
+          group: DamageGroups.fire,
+          scale: 0.8,
+          duration: 1.7,
+          interval: 0.5,
+        },
+      ],
     },
   ],
   primaryFireRate: [

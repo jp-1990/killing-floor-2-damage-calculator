@@ -12,21 +12,24 @@ export enum FireMode {
   auto = "auto",
 }
 
+export interface DoTDamageModel {
+  type: DamageTypes;
+  group: DamageGroups;
+  scale: number;
+  interval: number;
+  duration: number;
+  damage?: number;
+  stacking?: boolean;
+  maxStacks?: number;
+}
+
 export interface DamageModel {
   type: DamageTypes;
   group: DamageGroups;
   damage: number;
   base: number;
   penetration?: number;
-  DoT?: {
-    scale: number;
-    interval: number;
-    duration: number;
-    damage?: number;
-    damagePerAmmo?: { type: FireMode; damage: number }[];
-    stacking?: boolean;
-    maxStacks?: number;
-  };
+  DoT?: DoTDamageModel[];
 }
 
 export interface ReloadModel {

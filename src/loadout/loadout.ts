@@ -2,7 +2,9 @@ import { GameType } from "../types";
 import { buildPerk, BuildPerkType, applyModifiers } from "../perks";
 import { selectWeapons, SelectWeaponsType } from "../weapons";
 import { buildZeds } from "../zeds";
-import { traceHead } from "../weapons/utils";
+import { traceZones } from "../weapons/utils";
+import { shotsToHitzone } from "./utils";
+import { FireMode } from "../weapons/types";
 
 // input ----
 // perk
@@ -72,62 +74,32 @@ export class Loadout {
     });
   }
 
-  // ** DoT only applies on first el in damagePerAmmo array **
   #calcAmmoToKill() {
     // loop over zeds
     const output = this.zeds.map((zed) => {
       // build weapon stats for zed
       const weapons = this.weapons.map((weapon) => {
-        const weaponDamage: ["primaryDamage", "secondaryDamage"?] = [
+        const fireType: ["primaryDamage", "secondaryDamage"?] = [
           "primaryDamage",
         ];
-        if (weapon.stats.secondaryDamage) weaponDamage.push("secondaryDamage");
+        if (weapon.stats.secondaryDamage) fireType.push("secondaryDamage");
 
-        const damage = weaponDamage.map((el) => {
+        const ammo = fireType.map((el) => {
           if (!el) return;
+          const bodyModifier =
+            zed.hitzones.find((el) => el.name === "body")?.modifier || 1;
 
           const shots = zed.hitzones.map((zone) => {
-            let bodyDamage = 0;
-            let headDamage = 0;
-            let counter = 0;
-            // loop while damage < health
-            while (
-              bodyDamage < zed.health.body &&
-              headDamage < zed.health.head
-            ) {
-              // target zone
-              const target = zone.name;
-              const modifier = zone.modifier;
-              const bodyModifier =
-                zed.hitzones.find((el) => el.name === "body")?.modifier || 1;
-
-              weapon.stats[el]?.forEach((e) => {
-                let damage = e.damage;
-                if (e.DoT && e.DoT.damagePerAmmo)
-                  damage += e.DoT.damagePerAmmo[0].damage;
-                // apply modifier
-                if (target === "head" && !traceHead(e.type)) {
-                  damage *= bodyModifier;
-                } else {
-                  damage *= modifier;
-                }
-                // apply resistance
-                const damageGroup = e.group as keyof typeof zed.resistances;
-                if (zed.resistances[damageGroup] !== undefined) {
-                  damage *= zed.resistances[damageGroup];
-                }
-                // if target = head, apply modified damage to head and body health
-                if (target === "head" && traceHead(e.type))
-                  headDamage += damage;
-
-                // if damage type cant hit head, apply to body
-                bodyDamage += damage;
-              });
-
-              counter++;
-            }
-
-            return { [zone.name]: counter };
+            return shotsToHitzone<typeof weapon, typeof zed.resistances>({
+              zone,
+              weapon,
+              bodyModifier,
+              traceZones,
+              health: zed.health,
+              resistances: zed.resistances,
+              fireType: el,
+              fireMode: FireMode.auto,
+            });
           });
 
           return {
@@ -138,7 +110,7 @@ export class Loadout {
         return {
           name: weapon.name,
           upgrade: weapon.upgrade,
-          damage,
+          ammo,
         };
       });
 

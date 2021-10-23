@@ -1,4 +1,4 @@
-import { WeaponStatsType, DamageModel, FireRateModel } from "../types";
+import { WeaponStatsType, DamageModel } from "../types";
 
 export type UpgradeStatsType = {
   cost: number;
@@ -10,38 +10,27 @@ export type UpgradeStatsType = {
  *
  * @param base - Base damage model
  * @param upgrade - Upgrade damage multiplier
- * @param fireRate - Fire rate array
  * @returns DamageModel with upgrade applied
  *
- * @description Function to apply damage upgrades to a damage model, and calculate DoT damage per ammo for weapons that apply a DoT.
+ * @description Function to apply damage upgrades to a damage model.
  */
 const calcDamage = (
   base: DamageModel,
-  multiplier: UpgradeStatsType["damageMultiplier"],
-  fireRate: FireRateModel[] | undefined
+  multiplier: UpgradeStatsType["damageMultiplier"]
 ) => {
   const output = {
     ...base,
     damage: base.base + base.base * multiplier,
   };
-  if (base.DoT !== undefined && fireRate) {
-    const DoT = base.DoT;
-    const damagePerAmmo = fireRate.map((el) => {
+  if (base.DoT !== undefined) {
+    const DoT = base.DoT.map((el) => {
       return {
-        type: el.type,
-        // ((ticks * damage) * ( 1 / duration)) / shots per second
-        damage:
-          (Math.floor(DoT.duration / DoT.interval) *
-            (output.damage * DoT.scale) *
-            (1 / DoT.duration)) /
-          (el.rate / 60),
+        ...el,
+        damage: output.damage * el.scale,
       };
     });
-    output.DoT = {
-      ...base.DoT,
-      damage: output.damage * DoT.scale,
-      damagePerAmmo,
-    };
+
+    output.DoT = DoT;
   }
   return output;
 };
@@ -69,11 +58,9 @@ export const calculateBaseStats = (
     if (!ele) return;
     const target = baseStats[ele];
     if (!target) return;
-    const fireRate =
-      ele === "primaryDamage" ? "primaryFireRate" : "secondaryFireRate";
-    // apply upgrade to primary damage values
+    // apply upgrade to damage values
     const upgradedDamageValues = target.map((el: DamageModel) => {
-      return calcDamage(el, upgradeStats.damageMultiplier, baseStats[fireRate]);
+      return calcDamage(el, upgradeStats.damageMultiplier);
     });
     output[ele] = upgradedDamageValues;
   });

@@ -70,6 +70,9 @@ export interface WeaponStatsType {
   secondaryDamage?: DamageModel[];
   secondaryFireRate?: FireRateModel[];
 
+  bashDamage?: DamageModel[];
+  bashFireRate?: FireRateModel[];
+
   reload: ReloadModel[];
   handling: HandlingModel;
   ammo: AmmoModel;

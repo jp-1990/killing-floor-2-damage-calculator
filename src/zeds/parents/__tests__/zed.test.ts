@@ -18,7 +18,7 @@ describe("zed parent class", () => {
     expect(fleshpound).toHaveProperty("hitzones", { head: 1.1 });
     expect(fleshpound).toHaveProperty("penetrationResistance", 5);
     expect(fleshpound).toHaveProperty("health");
-    expect(fleshpound).toHaveProperty("armour");
+    // expect(fleshpound).toHaveProperty("armour");
   });
   test("zed is instance of Zed", () => {
     expect(fleshpound).toBeInstanceOf(Zed);

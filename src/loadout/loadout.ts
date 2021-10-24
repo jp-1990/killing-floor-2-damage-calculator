@@ -4,35 +4,6 @@ import { selectWeapons, SelectWeaponsType } from "../weapons";
 import { buildZeds } from "../zeds";
 import { traceZones } from "../weapons/utils";
 import { shotsToHitzone } from "./utils";
-import { FireMode } from "../weapons/types";
-
-// input ----
-// perk
-// game
-// weapons[]
-// zeds[]
-
-// stats ----
-// game :{
-//  difficulty,
-//  players
-// }
-// perkStats :{
-// ...result of select perk
-// }
-// weapons:{
-//   name,
-// }[]
-// zeds[]
-
-// methods ----
-// applyPerkModifiers() // apply perk modifiers to weapons stats
-// calcDamagePerSecond() // calculate damage per second for weapons
-// calcDamagePerMag() // calculate damage per mag
-// calcTotalDamage() // calculate damage for expending all ammo
-
-// calcKillTime() // time to kill each zed (head/body) for each weapon **account for reloads
-// calcAmmoToKill() // shots to kill each zed (head/body) for each weapon
 
 interface LoadoutInputType {
   game: GameType;
@@ -79,10 +50,11 @@ export class Loadout {
     const output = this.zeds.map((zed) => {
       // build weapon stats for zed
       const weapons = this.weapons.map((weapon) => {
-        const fireType: ["primaryDamage", "secondaryDamage"?] = [
+        const fireType: ["primaryDamage", "bashDamage"?, "secondaryDamage"?] = [
           "primaryDamage",
         ];
         if (weapon.stats.secondaryDamage) fireType.push("secondaryDamage");
+        if (weapon.stats.bashDamage) fireType.push("bashDamage");
 
         const ammo = fireType.map((el) => {
           if (!el) return;
@@ -98,7 +70,6 @@ export class Loadout {
               health: zed.health,
               resistances: zed.resistances,
               fireType: el,
-              fireMode: FireMode.auto,
             });
           });
 

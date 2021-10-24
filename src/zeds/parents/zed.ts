@@ -1,5 +1,5 @@
 import { GameType } from "../../types";
-import { calculateArmour } from "../utils/calculateArmour";
+// import { calculateArmour } from "../utils/calculateArmour";
 import { calculateHealth } from "../utils/calculateHealth";
 import { calculateResistances } from "../utils/calculateResistances";
 
@@ -27,7 +27,7 @@ export class Zed<Resistances, Hitzones> {
   name;
   game;
   health;
-  armour;
+  // armour;
   resistances;
   hitzones;
   penetrationResistance;
@@ -45,10 +45,10 @@ export class Zed<Resistances, Hitzones> {
       values.game.players,
       values.name
     );
-    this.armour = calculateArmour(
-      values.game.difficulty,
-      values.game.players,
-      values.name
-    );
+    // this.armour = calculateArmour(
+    //   values.game.difficulty,
+    //   values.game.players,
+    //   values.name
+    // );
   }
 }

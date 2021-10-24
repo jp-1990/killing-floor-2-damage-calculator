@@ -66,7 +66,6 @@ describe("shotsToHitzone - function", () => {
           },
         },
       },
-      fireMode: FireMode.auto,
       fireType: "primaryDamage",
       traceZones,
     });

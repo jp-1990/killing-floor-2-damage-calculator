@@ -1,4 +1,4 @@
-import { FireMode, DamageGroups, WeaponStatsType } from "../../weapons/types";
+import { DamageGroups, WeaponStatsType } from "../../weapons/types";
 
 interface BasicWeaponType {
   name: string;
@@ -21,8 +21,7 @@ interface ShotsToHitzoneArgs<
   bodyModifier: number;
   resistances: R;
   weapon: W;
-  fireType: "primaryDamage" | "secondaryDamage";
-  fireMode: FireMode;
+  fireType: "primaryDamage" | "secondaryDamage" | "bashDamage";
   traceZones: (type: DamageGroups) => boolean;
 }
 
@@ -35,7 +34,6 @@ interface ShotsToHitzoneArgs<
  * @param resistances - zed damage resistance object
  * @param weapon - weapon hitting the target zone
  * @param fireType - 'primaryDamage' or 'secondaryDamage'
- * @param fireMode - fire mode of the weapon (semi, auto, burst)
  * @param traceZones - (damageGroup) => boolean. Function indicating whether the supplied damage group can trace hitzones
  * @returns object { [ hitzone ]: number }
  *
@@ -51,7 +49,6 @@ export const shotsToHitzone = <
   resistances,
   weapon,
   fireType,
-  fireMode,
   traceZones,
 }: ShotsToHitzoneArgs<W, R>) => {
   // target zone
@@ -63,8 +60,10 @@ export const shotsToHitzone = <
   weapon.stats[fireType]?.forEach((e) => {
     const base = { damage: e.damage, group: e.group };
     const dots = [];
-    const fireRateKey =
-      fireType === "primaryDamage" ? "primaryFireRate" : "secondaryFireRate";
+    let fireRateKey: "primaryFireRate" | "secondaryFireRate" | "bashFireRate" =
+      "primaryFireRate";
+    if (fireType === "secondaryDamage") fireRateKey = "secondaryFireRate";
+    if (fireType === "bashDamage") fireRateKey = "bashFireRate";
 
     if (!traceZones(e.group)) {
       base.damage *= bodyModifier;
@@ -77,7 +76,7 @@ export const shotsToHitzone = <
     if (DoTInput && fireRate) {
       // calc damage per shot per dot
       const dotDamage = DoTInput.map((dot) => {
-        const mode = fireRate.find((el) => el.type === fireMode);
+        const mode = fireRate[0];
         return {
           // ((ticks * damage) * ( 1 / duration)) / shots per second * modifier
           damage:

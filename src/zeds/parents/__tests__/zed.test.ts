@@ -8,15 +8,17 @@ describe("zed parent class", () => {
     hitzones: { head: 1.1 },
     penetrationResistance: 5,
   });
-  test("returns zed object", () => {
+  test("returns zed object with expected values", () => {
     expect(fleshpound).toHaveProperty("name", "fleshpound");
     expect(fleshpound).toHaveProperty("game", {
       players: 1,
       difficulty: "normal",
     });
-    expect(fleshpound).toHaveProperty("resistances", { ballistic: 0.5 });
+    expect(fleshpound).toHaveProperty("resistances", { ballistic: 0.625 });
     expect(fleshpound).toHaveProperty("hitzones", { head: 1.1 });
     expect(fleshpound).toHaveProperty("penetrationResistance", 5);
+    expect(fleshpound).toHaveProperty("health");
+    expect(fleshpound).toHaveProperty("armour");
   });
   test("zed is instance of Zed", () => {
     expect(fleshpound).toBeInstanceOf(Zed);

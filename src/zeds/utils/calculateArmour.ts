@@ -16,18 +16,24 @@ const armour = {
   }),
 };
 
+type ArmouredZed = keyof typeof armour;
 /**
  *
  * @param difficulty - a valid difficulty ("normal" | "hard" | "suicidal" | "hoe")
  * @param players - number of players ( 1-6 )
- * @param zed - name of zed ( must be a zed that wears armour )
+ * @param zed - name of zed
  * @returns armour values object for the players, difficulty and zed provided
  */
 export const calculateArmour = (
   difficulty: GameType["difficulty"],
   players: GameType["players"],
-  zed: keyof typeof armour
+  zed: string
 ) => {
+  const isArmoured = (zed: string | ArmouredZed): zed is ArmouredZed => {
+    return armour[zed as ArmouredZed] !== undefined;
+  };
+  if (!isArmoured(zed)) return {};
+
   const output: { [key: string]: number } = {};
 
   output.head = armour[zed][difficulty].head[players];

@@ -9,4 +9,5 @@ test("returns correct body and head armour of zed based on input", () => {
     body: 500,
     head: 450,
   });
+  expect(calculateArmour("hoe", 6, "scrake")).toStrictEqual({});
 });
